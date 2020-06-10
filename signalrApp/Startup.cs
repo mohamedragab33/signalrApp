@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using signalrApp.hubs;
 
 namespace signalrApp
 {
@@ -31,7 +32,7 @@ namespace signalrApp
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
-
+            services.AddSignalR();
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }
 
@@ -47,7 +48,13 @@ namespace signalrApp
                 app.UseExceptionHandler("/Home/Error");
                 app.UseHsts();
             }
+            app.UseSignalR(routes=> {
 
+                routes.MapHub<chatHub>("/chatHub");
+            
+            });
+               
+            
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseCookiePolicy();
